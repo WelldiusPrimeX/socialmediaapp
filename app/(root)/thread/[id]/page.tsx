@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser } from "@clerk/nextjs";
 
 import Comment from "@/components/forms/Comment";
 import ThreadCard from "@/components/cards/ThreadCard";
@@ -10,7 +10,6 @@ import { fetchThreadById } from "@/lib/actions/thread.actions";
 export const revalidate = 0;
 
 const Page = async ({ params }: { params: { id: string } }) => {
-  console.log(params);
   if (!params.id) return null;
 
   const user = await currentUser();
@@ -18,7 +17,6 @@ const Page = async ({ params }: { params: { id: string } }) => {
 
   const userInfo = await fetchUser(user.id);
   if (!userInfo?.onboarded) redirect("/onboarding");
-  console.log(params);
 
   const thread = await fetchThreadById(params.id);
 
@@ -36,6 +34,7 @@ const Page = async ({ params }: { params: { id: string } }) => {
           createdAt={thread.createdAt}
           comments={thread.children}
         />
+        console.log(params);
       </div>
 
       <div className="mt-7">
